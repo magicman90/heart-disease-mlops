@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Environments
+venv/
+.venv/
+env/
+
+# MLflow
+mlflow.db
+mlruns/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+
+# Large model binaries (uncomment if you don't want to version large joblib files)
+# models/*.joblib
+
+# Data (uncomment if the raw CSV shouldn't be committed; the download script regenerates it)
+# data/raw/*.csv

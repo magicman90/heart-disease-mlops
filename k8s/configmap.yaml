@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: heart-disease-api-config
+data:
+  LOG_LEVEL: "INFO"
+  MODEL_VERSION: "logistic_regression_v1"
