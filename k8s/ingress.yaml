@@ -7,7 +7,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: heart-disease.local   # add to /etc/hosts when testing with Minikube
+    - host: heart-disease.local
       http:
         paths:
           - path: /

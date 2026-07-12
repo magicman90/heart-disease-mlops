@@ -1,22 +1,18 @@
-"""
-eda.py
-------
-Generates the exploratory data analysis visualizations required by the
-assignment: histograms, correlation heatmap, class balance, and missing
-value analysis. Saves all figures to reports/figures/.
 
-Usage:
-    python src/eda.py
-"""
+#This code will perform exlporatry data analysis and produce the graphs like histogram,correlation heatmap, class balanace,
+#and missing value analysis
+#Execution:
+#python src/eda.py
+
 
 import os
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import seaborn as sns  # noqa: E402
+import matplotlib.pyplot as plt 
+import seaborn as sns
 
-from preprocessing import (  # noqa: E402
+from preprocessing import ( 
     load_raw,
     clean_and_binarize,
     NUMERIC_FEATURES,
@@ -43,7 +39,7 @@ def run_eda():
     print("\n=== Missing values after numeric coercion ===")
     print(df.isna().sum())
 
-    # 1. Missing values bar chart
+    # Missing values bar chart
     na_counts = df.isna().sum()
     plt.figure(figsize=(8, 5))
     na_counts.plot(kind="bar", color="#4C72B0")
@@ -53,7 +49,7 @@ def run_eda():
     plt.savefig(os.path.join(FIG_DIR, "missing_values.png"), dpi=150)
     plt.close()
 
-    # 2. Class balance
+    # Class balance
     plt.figure(figsize=(5, 5))
     counts = df[BINARY_TARGET_COLUMN].value_counts().sort_index()
     labels = ["No Disease (0)", "Disease (1)"]
@@ -63,14 +59,14 @@ def run_eda():
     plt.savefig(os.path.join(FIG_DIR, "class_balance.png"), dpi=150)
     plt.close()
 
-    # 3. Histograms of numeric features
+    #Histograms
     df[NUMERIC_FEATURES].hist(figsize=(12, 8), bins=20, color="#4C72B0", edgecolor="black")
     plt.suptitle("Distribution of Numeric Features")
     plt.tight_layout()
     plt.savefig(os.path.join(FIG_DIR, "histograms.png"), dpi=150)
     plt.close()
 
-    # 4. Correlation heatmap
+    # Correlation heatmap
     plt.figure(figsize=(10, 8))
     corr = df.corr(numeric_only=True)
     sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", center=0)
@@ -79,7 +75,7 @@ def run_eda():
     plt.savefig(os.path.join(FIG_DIR, "correlation_heatmap.png"), dpi=150)
     plt.close()
 
-    # 5. Feature relationship: age vs max heart rate, colored by target
+    #Feature relationship: age vs max heart rate, colored by target
     plt.figure(figsize=(7, 5))
     sns.scatterplot(data=df, x="age", y="thalach", hue=BINARY_TARGET_COLUMN, palette=["#55A868", "#C44E52"])
     plt.title("Age vs Max Heart Rate by Diagnosis")

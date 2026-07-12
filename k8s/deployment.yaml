@@ -17,7 +17,7 @@ spec:
       containers:
         - name: heart-disease-api
           image: heart-disease-api:latest
-          imagePullPolicy: IfNotPresent   # use Never/IfNotPresent for locally-built Minikube images
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
           readinessProbe:

@@ -13,7 +13,7 @@ services:
       - ../api_requests.log:/app/src/api_requests.log
     restart: unless-stopped
 
-  # Optional: Prometheus for metrics scraping (Task 8 - Monitoring)
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -24,7 +24,7 @@ services:
     depends_on:
       - heart-disease-api
 
-  # Optional: Grafana for dashboarding (Task 8 - Monitoring)
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana

@@ -9,4 +9,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8000
-  type: LoadBalancer   # use NodePort if testing on Minikube without a cloud LB
+  type: LoadBalancer

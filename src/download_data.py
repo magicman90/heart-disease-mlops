@@ -1,13 +1,7 @@
-"""
-download_data.py
------------------
-Downloads the UCI Heart Disease (Cleveland) dataset and stores a raw copy
-under data/raw/. This is the canonical 303-row, 14-attribute dataset from
-the UCI Machine Learning Repository (Cleveland Clinic Foundation subset).
 
-Usage:
-    python src/download_data.py
-"""
+#This code will execute the data downloading form the given UCi Heart Disease dataset with 14 attributes
+#Execution:
+#python src/download_data.py
 
 import io
 import os
@@ -18,8 +12,6 @@ import urllib.request
 import certifi
 import pandas as pd
 
-# Column names as documented by the UCI ML Repository for the
-# processed.cleveland.data file.
 COLUMN_NAMES = [
     "age",
     "sex",
@@ -37,9 +29,7 @@ COLUMN_NAMES = [
     "diagnosis",
 ]
 
-# Primary source: UCI ML Repository mirror. Secondary: GitHub mirror of the
-# same processed Cleveland file (used automatically if the primary is
-# unreachable, e.g. due to network/firewall restrictions).
+
 SOURCES = [
     "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data",
     "https://raw.githubusercontent.com/dataprofessor/data/master/heart-disease-cleveland.csv",
@@ -48,14 +38,6 @@ SOURCES = [
 RAW_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "raw")
 RAW_PATH = os.path.join(RAW_DIR, "heart_disease_uci_raw.csv")
 
-# Use certifi's CA bundle as the primary trust store rather than relying
-# solely on the OS/Python install's default trust store. This avoids the
-# common macOS "SSL: CERTIFICATE_VERIFY_FAILED ... unable to get local
-# issuer certificate" error that occurs when Python.org's installer hasn't
-# had its bundled "Install Certificates.command" run. If certifi's bundle
-# doesn't work either (e.g. behind a corporate/sandbox proxy that does its
-# own TLS interception with a locally-trusted certificate), we fall back to
-# the system default SSL context.
 SSL_CONTEXTS = [
     ("certifi", ssl.create_default_context(cafile=certifi.where())),
     ("system default", ssl.create_default_context()),

@@ -1,14 +1,9 @@
-"""
-train.py
---------
-Trains and tunes two classification models (Logistic Regression and
-Random Forest) on the UCI Heart Disease dataset, logs every run to
-MLflow (params, metrics, plots, model artifact), and saves the best
-overall model + fitted preprocessor for reuse by the serving API.
 
-Usage:
-    python src/train.py
-"""
+#This code is written to train the models Random FOrest and Logistic Regression on the heart disease dataset, 
+#it stores every run to the MLflow with all expected details and saves the best model for reuse during inferencing using APIs
+#Execution:
+#python src/train.py
+
 
 import os
 import joblib
@@ -16,16 +11,16 @@ import pandas as pd
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
+import matplotlib.pyplot as plt
 
-import mlflow  # noqa: E402
-import mlflow.sklearn  # noqa: E402
+import mlflow 
+import mlflow.sklearn
 
-from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold  # noqa: E402
-from sklearn.linear_model import LogisticRegression  # noqa: E402
-from sklearn.ensemble import RandomForestClassifier  # noqa: E402
-from sklearn.pipeline import Pipeline  # noqa: E402
-from sklearn.metrics import (  # noqa: E402
+from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import (
     accuracy_score,
     precision_score,
     recall_score,
@@ -36,7 +31,7 @@ from sklearn.metrics import (  # noqa: E402
     ConfusionMatrixDisplay,
 )
 
-from preprocessing import load_raw, clean_and_binarize, build_preprocessor, get_feature_target_split  # noqa: E402
+from preprocessing import load_raw, clean_and_binarize, build_preprocessor, get_feature_target_split
 
 BASE_DIR = os.path.join(os.path.dirname(__file__), "..")
 RAW_PATH = os.path.join(BASE_DIR, "data", "raw", "heart_disease_uci_raw.csv")
@@ -108,10 +103,6 @@ def main():
     os.makedirs(MODEL_DIR, exist_ok=True)
     os.makedirs(FIG_DIR, exist_ok=True)
 
-    # Use a local SQLite-backed tracking store (MLflow's file store is now in
-    # maintenance mode). Artifacts (models/plots) are explicitly rooted at
-    # <project_root>/mlruns regardless of the current working directory, so
-    # `mlflow ui` from the project root always finds everything.
     db_path = os.path.join(BASE_DIR, "mlflow.db")
     mlflow.set_tracking_uri(f"sqlite:///{db_path}")
 
@@ -163,7 +154,6 @@ def main():
             if metrics["roc_auc"] > best_overall["roc_auc"]:
                 best_overall = {"model_name": model_name, "pipeline": best_pipe, **metrics}
 
-    # Persist comparison table
     results_df = pd.DataFrame(results)
     results_csv = os.path.join(BASE_DIR, "reports", "model_comparison.csv")
     os.makedirs(os.path.dirname(results_csv), exist_ok=True)
@@ -171,7 +161,6 @@ def main():
     print("\n=== Model comparison ===")
     print(results_df[["model", "accuracy", "precision", "recall", "f1_score", "roc_auc"]])
 
-    # Save the best model (full pipeline: preprocessing + classifier) for serving
     best_model_path = os.path.join(MODEL_DIR, "best_model.joblib")
     joblib.dump(best_overall["pipeline"], best_model_path)
 

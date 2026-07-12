@@ -1,4 +1,5 @@
 """
+#this code module is written for 
 Unit tests for src/preprocessing.py
 """
 
@@ -9,7 +10,7 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from preprocessing import (  # noqa: E402
+from preprocessing import (
     clean_and_binarize,
     build_preprocessor,
     get_feature_target_split,
@@ -51,7 +52,6 @@ def test_clean_and_binarize_creates_binary_target(sample_raw_df):
 
 def test_clean_and_binarize_handles_missing_markers(sample_raw_df):
     df = clean_and_binarize(sample_raw_df)
-    # '?' should become NaN in ca/thal after numeric coercion
     assert df["ca"].isna().sum() == 1
     assert df["thal"].isna().sum() == 1
 
@@ -68,9 +68,7 @@ def test_preprocessor_fits_and_transforms(sample_raw_df):
     X, y = get_feature_target_split(df)
     preprocessor = build_preprocessor()
     transformed = preprocessor.fit_transform(X)
-    # Output should be a 2D array with same number of rows as input
     assert transformed.shape[0] == len(X)
-    # No NaNs should remain after imputation
     import numpy as np
 
     arr = transformed.toarray() if hasattr(transformed, "toarray") else transformed
