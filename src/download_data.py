@@ -1,5 +1,11 @@
 """
-Execution:
+download_data.py
+-----------------
+Downloads the UCI Heart Disease (Cleveland) dataset and stores a raw copy
+under data/raw/. This is the canonical 303-row, 14-attribute dataset from
+the UCI Machine Learning Repository (Cleveland Clinic Foundation subset).
+
+Usage:
     python src/download_data.py
 """
 
@@ -42,6 +48,14 @@ SOURCES = [
 RAW_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "raw")
 RAW_PATH = os.path.join(RAW_DIR, "heart_disease_uci_raw.csv")
 
+# Use certifi's CA bundle as the primary trust store rather than relying
+# solely on the OS/Python install's default trust store. This avoids the
+# common macOS "SSL: CERTIFICATE_VERIFY_FAILED ... unable to get local
+# issuer certificate" error that occurs when Python.org's installer hasn't
+# had its bundled "Install Certificates.command" run. If certifi's bundle
+# doesn't work either (e.g. behind a corporate/sandbox proxy that does its
+# own TLS interception with a locally-trusted certificate), we fall back to
+# the system default SSL context.
 SSL_CONTEXTS = [
     ("certifi", ssl.create_default_context(cafile=certifi.where())),
     ("system default", ssl.create_default_context()),

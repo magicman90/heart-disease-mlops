@@ -1,5 +1,15 @@
 """
-This code will deploy APIs for heart disease prediction
+app.py
+------
+FastAPI serving application for the Heart Disease risk classifier.
+
+Endpoints:
+    GET  /            -> health/info
+    GET  /health       -> liveness probe (used by Docker/K8s)
+    POST /predict       -> returns prediction + confidence for a patient record
+
+Run locally:
+    uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 """
 
 import os
@@ -13,11 +23,17 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from prometheus_fastapi_instrumentator import Instrumentator
 
+# --------------------------------------------------------------------------
+# Logging setup (Task 8: Monitoring & Logging - API request logging)
+# --------------------------------------------------------------------------
 _log_handlers = [logging.StreamHandler()]
 try:
     _log_path = os.path.join(os.path.dirname(__file__), "..", "api_requests.log")
     _log_handlers.append(logging.FileHandler(_log_path))
 except (PermissionError, OSError) as e:
+    # Falls back to console-only logging if the filesystem is read-only or
+    # not writable by the container's user (e.g. a locked-down K8s
+    # securityContext). Never let logging setup crash the whole app.
     print(f"WARNING: could not open log file for writing ({e}); logging to console only.")
 
 logging.basicConfig(
@@ -53,9 +69,12 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# In-memory request counters for the simple human-readable stats endpoint
 REQUEST_STATS = {"total_requests": 0, "predict_requests": 0, "errors": 0}
 
-
+# Prometheus instrumentation: exposes GET /metrics in Prometheus exposition
+# format (request counts, latency histograms, status codes, etc.) so
+# Prometheus can scrape it directly and Grafana can visualize it (Task 8).
 Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 

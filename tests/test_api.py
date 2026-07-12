@@ -1,5 +1,7 @@
 """
 Unit tests for src/app.py (FastAPI serving layer).
+Uses FastAPI's TestClient which triggers the lifespan startup, loading the
+real trained model artifact from models/. Run `python src/train.py` first.
 """
 
 import os
@@ -8,7 +10,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 import pytest  # noqa: E402
-from fastapi.testclient import TestClient
+from fastapi.testclient import TestClient  # noqa: E402
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "best_model.joblib")
 
@@ -17,8 +19,10 @@ pytestmark = pytest.mark.skipif(
     reason="Trained model artifact not found; run `python src/train.py` first.",
 )
 
-from app import app 
+from app import app  # noqa: E402
 
+# `with` triggers FastAPI's lifespan startup/shutdown events, which is what
+# actually loads the model artifact into memory before requests are served.
 client = TestClient(app)
 client.__enter__()
 
@@ -78,4 +82,5 @@ def test_stats_endpoint_tracks_requests():
 def test_prometheus_metrics_endpoint_exposed():
     response = client.get("/metrics")
     assert response.status_code == 200
+    # Prometheus exposition format is plain text, not JSON
     assert "http_requests_total" in response.text or "python_info" in response.text

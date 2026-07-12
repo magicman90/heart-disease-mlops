@@ -1,8 +1,12 @@
 """
-
+preprocessing.py
+-----------------
 Cleaning, target binarization, and a reusable sklearn Pipeline
 (ColumnTransformer) for feature scaling/encoding.
 
+The same `build_preprocessor()` pipeline is fit during training and reused
+unchanged at inference time (saved alongside the model), so preprocessing
+is guaranteed to be identical in both places.
 """
 
 import pandas as pd
@@ -11,10 +15,11 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
-
+# Numeric (continuous) features -> impute median + scale
 NUMERIC_FEATURES = ["age", "trestbps", "chol", "thalach", "oldpeak"]
 
-
+# Categorical features (encoded as ints in the raw data but are really
+# categories) -> impute most frequent + one-hot encode
 CATEGORICAL_FEATURES = ["sex", "cp", "fbs", "restecg", "exang", "slope", "ca", "thal"]
 
 TARGET_COLUMN = "diagnosis"

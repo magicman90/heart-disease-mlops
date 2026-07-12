@@ -68,7 +68,10 @@ def test_preprocessor_fits_and_transforms(sample_raw_df):
     X, y = get_feature_target_split(df)
     preprocessor = build_preprocessor()
     transformed = preprocessor.fit_transform(X)
+    # Output should be a 2D array with same number of rows as input
     assert transformed.shape[0] == len(X)
+    # No NaNs should remain after imputation
     import numpy as np
+
     arr = transformed.toarray() if hasattr(transformed, "toarray") else transformed
     assert not np.isnan(arr).any()

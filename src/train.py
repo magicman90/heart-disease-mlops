@@ -1,6 +1,12 @@
 """
+train.py
+--------
+Trains and tunes two classification models (Logistic Regression and
+Random Forest) on the UCI Heart Disease dataset, logs every run to
+MLflow (params, metrics, plots, model artifact), and saves the best
+overall model + fitted preprocessor for reuse by the serving API.
 
-Execution:
+Usage:
     python src/train.py
 """
 
@@ -30,7 +36,7 @@ from sklearn.metrics import (  # noqa: E402
     ConfusionMatrixDisplay,
 )
 
-from preprocessing import load_raw, clean_and_binarize, build_preprocessor, get_feature_target_split
+from preprocessing import load_raw, clean_and_binarize, build_preprocessor, get_feature_target_split  # noqa: E402
 
 BASE_DIR = os.path.join(os.path.dirname(__file__), "..")
 RAW_PATH = os.path.join(BASE_DIR, "data", "raw", "heart_disease_uci_raw.csv")
@@ -102,7 +108,10 @@ def main():
     os.makedirs(MODEL_DIR, exist_ok=True)
     os.makedirs(FIG_DIR, exist_ok=True)
 
-   
+    # Use a local SQLite-backed tracking store (MLflow's file store is now in
+    # maintenance mode). Artifacts (models/plots) are explicitly rooted at
+    # <project_root>/mlruns regardless of the current working directory, so
+    # `mlflow ui` from the project root always finds everything.
     db_path = os.path.join(BASE_DIR, "mlflow.db")
     mlflow.set_tracking_uri(f"sqlite:///{db_path}")
 
