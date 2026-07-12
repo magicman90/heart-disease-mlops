@@ -1,7 +1,7 @@
-
-#This code will execute the data downloading form the given UCi Heart Disease dataset with 14 attributes
-#Execution:
-#python src/download_data.py
+"""
+Execution:
+    python src/download_data.py
+"""
 
 import io
 import os
@@ -12,6 +12,8 @@ import urllib.request
 import certifi
 import pandas as pd
 
+# Column names as documented by the UCI ML Repository for the
+# processed.cleveland.data file.
 COLUMN_NAMES = [
     "age",
     "sex",
@@ -29,7 +31,9 @@ COLUMN_NAMES = [
     "diagnosis",
 ]
 
-
+# Primary source: UCI ML Repository mirror. Secondary: GitHub mirror of the
+# same processed Cleveland file (used automatically if the primary is
+# unreachable, e.g. due to network/firewall restrictions).
 SOURCES = [
     "https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.cleveland.data",
     "https://raw.githubusercontent.com/dataprofessor/data/master/heart-disease-cleveland.csv",

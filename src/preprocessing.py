@@ -1,5 +1,9 @@
+"""
 
-#This code module works on preprocessing the data by cleaning, normalizing and feature scalingp
+Cleaning, target binarization, and a reusable sklearn Pipeline
+(ColumnTransformer) for feature scaling/encoding.
+
+"""
 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -10,6 +14,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 NUMERIC_FEATURES = ["age", "trestbps", "chol", "thalach", "oldpeak"]
 
+
 CATEGORICAL_FEATURES = ["sex", "cp", "fbs", "restecg", "exang", "slope", "ca", "thal"]
 
 TARGET_COLUMN = "diagnosis"
@@ -17,12 +22,18 @@ BINARY_TARGET_COLUMN = "target"
 
 FEATURE_COLUMNS = NUMERIC_FEATURES + CATEGORICAL_FEATURES
 
+
 def load_raw(path: str) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
 def clean_and_binarize(df: pd.DataFrame) -> pd.DataFrame:
-    
+    """
+    - Coerces the categorical columns that may contain NaN back to numeric
+    - Binarizes the multi-class UCI target (0 = no disease, 1-4 = disease
+      of increasing severity) into a binary presence/absence label, as
+      required by the assignment ("binary target").
+    """
     df = df.copy()
 
     for col in CATEGORICAL_FEATURES:

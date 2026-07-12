@@ -1,12 +1,13 @@
-
-#this code is written for unit testing the apis that are deployed using app.py. It uses FastAPI test cleint
+"""
+Unit tests for src/app.py (FastAPI serving layer).
+"""
 
 import os
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-import pytest
+import pytest  # noqa: E402
 from fastapi.testclient import TestClient
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "models", "best_model.joblib")
@@ -16,7 +17,7 @@ pytestmark = pytest.mark.skipif(
     reason="Trained model artifact not found; run `python src/train.py` first.",
 )
 
-from app import app
+from app import app 
 
 client = TestClient(app)
 client.__enter__()

@@ -1,13 +1,6 @@
-
-#This code is written for launching the apis using swagger
-
-#Endpoints:
-#GET  /        :health/info
-#GET  /health  :liveness probe (used by Docker/K8s)
-#POST /predict :returns prediction + confidence for a patient record
-
-##Execution:
-#uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+"""
+This code will deploy APIs for heart disease prediction
+"""
 
 import os
 import logging
@@ -19,7 +12,6 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from prometheus_fastapi_instrumentator import Instrumentator
-
 
 _log_handlers = [logging.StreamHandler()]
 try:
@@ -62,6 +54,7 @@ app = FastAPI(
 )
 
 REQUEST_STATS = {"total_requests": 0, "predict_requests": 0, "errors": 0}
+
 
 Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 

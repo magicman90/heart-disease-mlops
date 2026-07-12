@@ -1,16 +1,14 @@
-
-#This code will perform exlporatry data analysis and produce the graphs like histogram,correlation heatmap, class balanace,
-#and missing value analysis
-#Execution:
-#python src/eda.py
-
+"""
+Execution:
+    python src/eda.py
+"""
 
 import os
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt 
-import seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns 
 
 from preprocessing import ( 
     load_raw,
@@ -59,7 +57,7 @@ def run_eda():
     plt.savefig(os.path.join(FIG_DIR, "class_balance.png"), dpi=150)
     plt.close()
 
-    #Histograms
+    # Histograms of numeric features
     df[NUMERIC_FEATURES].hist(figsize=(12, 8), bins=20, color="#4C72B0", edgecolor="black")
     plt.suptitle("Distribution of Numeric Features")
     plt.tight_layout()
@@ -75,7 +73,7 @@ def run_eda():
     plt.savefig(os.path.join(FIG_DIR, "correlation_heatmap.png"), dpi=150)
     plt.close()
 
-    #Feature relationship: age vs max heart rate, colored by target
+    # Feature relationship
     plt.figure(figsize=(7, 5))
     sns.scatterplot(data=df, x="age", y="thalach", hue=BINARY_TARGET_COLUMN, palette=["#55A868", "#C44E52"])
     plt.title("Age vs Max Heart Rate by Diagnosis")
